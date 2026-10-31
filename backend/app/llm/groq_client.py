@@ -14,7 +14,7 @@ class ModelError(RuntimeError):
 
 class GroqService:
     attempts = 3
-    backoff_seconds = 10
+    backoff_seconds = 20
 
     def __init__(self, api_key: str | None = None, model: str | None = None):
         self.api_key = api_key if api_key is not None else settings.groq_api_key
