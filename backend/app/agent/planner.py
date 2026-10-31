@@ -7,7 +7,7 @@ class Planner:
         self.llm = llm
 
     def create_plan(self, request: AgentRequest) -> AgentPlan:
-        system = "Create a practical execution plan for generating a professional document. Return JSON with document_type, title, assumptions, missing_information, tasks. Each task has id, description, dependencies, tool, required. Use 3-8 meaningful tasks, unique task_N ids, valid dependency ids. A task only sees the outputs of the tasks listed in its dependencies, so list every earlier task whose output it needs. Tools must be analysis, calculator, writer, or document. Include final document creation as the last task with tool document. Do not claim external research."
+        system = "Create a practical execution plan for generating a professional document. Return JSON with document_type, title, assumptions, missing_information, tasks. Each task has id, description, dependencies, tool, required. Use 3-8 meaningful tasks, unique task_N ids, valid dependency ids. A task only sees the outputs of the tasks listed in its dependencies, so list every earlier task whose output it needs. Tools must be analysis, calculator, writer, or document. Include final document creation as the last task with tool document; it produces a Microsoft Word (.docx) file. Do not claim external research."
         feedback = ""
         for _ in range(2):
             data = self.llm.structured(system, request.request + feedback)
