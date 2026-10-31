@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: taskpilot-ai-api
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    healthCheckPath: /health
+    envVars:
+      - key: GROQ_API_KEY
+        sync: false
+      - key: GROQ_MODEL
+        value: llama-3.3-70b-versatile
+      - key: FRONTEND_ORIGIN
+        sync: false
+      - key: RATE_LIMIT_PER_MINUTE
+        value: "10"
