@@ -9,5 +9,5 @@ class StructuredAnalysis:
             f"Focus: {task.description}",
             "Assumptions: " + ("; ".join(plan.assumptions) if plan.assumptions else "None identified by planner"),
             "Information gaps: " + ("; ".join(plan.missing_information) if plan.missing_information else "None identified"),
-            "Completed prerequisite outputs: " + ("; ".join(prior_results.values()) if prior_results else "None"),
+            "Completed prerequisite outputs: " + ("; ".join(output[:300] for output in prior_results.values()) if prior_results else "None"),
         ])
