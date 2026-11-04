@@ -9,7 +9,7 @@ class Planner:
         self.llm = llm
 
     def create_plan(self, request: AgentRequest) -> AgentPlan:
-        system = "Create a practical execution plan for generating a professional document. Return JSON with document_type, title, assumptions, missing_information, tasks. Each task has id, description, dependencies, tool, required. Use 3-8 meaningful tasks, unique task_N ids, valid dependency ids. A task only sees the outputs of the tasks listed in its dependencies, so list every earlier task whose output it needs. Tools must be analysis, calculator, writer, or document. Include final document creation as the last task with tool document; it produces a Microsoft Word (.docx) file. Do not claim external research."
+        system = "Create a practical execution plan for generating a professional document. Return JSON with document_type, title, assumptions, missing_information, tasks. Each task has id, description, dependencies, tool, required (true or false). Use 3-8 meaningful tasks, unique task_N ids, valid dependency ids. A task only sees the outputs of the tasks listed in its dependencies, so list every earlier task whose output it needs. Tools must be analysis, calculator, writer, or document. Include final document creation as the last task with tool document; it produces a Microsoft Word (.docx) file. Do not claim external research. If the request leaves budget, pricing, team size or technology open, plan tasks that decide them. Any writer task that discusses costs, staffing or pricing must list the calculator task in its dependencies so its figures match the calculation."
         feedback = ""
         reason = ""
         for _ in range(2):
@@ -44,6 +44,7 @@ class Planner:
                     "dependencies": [str(item) for item in task["dependencies"]] if isinstance(task.get("dependencies"), list) else [],
                     "tool": str(task.get("tool", "")).strip().lower(),
                     "description": str(task.get("description", ""))[:500],
+                    "required": str(task.get("required", True)).strip().lower() not in {"false", "no", "0", "optional"},
                 }
                 for task in tasks
                 if isinstance(task, dict)
